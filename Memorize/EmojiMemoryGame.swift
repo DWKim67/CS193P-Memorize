@@ -5,4 +5,9 @@
 //  Created by Daniel Kim on 2024-01-03.
 //
 
-import Foundation
+import SwiftUI
+
+class EmojiMemoryGame {
+//    var game: MemoryGame<String>
+    
+}

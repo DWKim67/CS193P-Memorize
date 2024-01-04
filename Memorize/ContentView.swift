@@ -12,13 +12,13 @@ enum Theme {
 }
 
 struct ContentView: View {
-    let halloweenEmojis: Array<String> = ["👻","🎃","🕷️","😈","💀","🕸️","🧙"]
+    let halloweenEmojis: Array<String> = ["👻","🎃","🕷️","😈","💀","🧙"]
     let xmasEmojis: Array<String> = ["🎅","🦌","🎄","🎁","⛄️","❄️"]
     let beachEmojis: Array<String> = ["🌊","☀️","🐚","🏖️","🦀","🩴"]
     
     @State var currentTheme = Theme.halloween
     @State var cardCount: Int = 7 * 2
-    @State var emojis = ["👻","🎃","🕷️","😈","💀","🕸️"]
+    @State var emojis = ["👻","🎃","🕷️","😈","💀","🧙"].shuffled() + ["👻","🎃","🕷️","😈","💀","🧙"].shuffled()
     @State var didButtonActivate = false
     
     
@@ -30,16 +30,14 @@ struct ContentView: View {
             ScrollView {
                 cards
             }
-            
             Spacer()
             themeChoosers
         }
-        
         .padding()
     }
     
     var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]) {
             
             ForEach(emojis.indices, id: \.self) { index in
                 CardView(content: emojis[index])
@@ -49,14 +47,6 @@ struct ContentView: View {
         }.foregroundColor(.orange)
     }
     
-    var cardCountAdjusters: some View {
-        HStack {
-            cardRemover
-            Spacer()
-            cardAdder
-        }.imageScale(.large)
-            .font(.largeTitle)
-    }
     
     var themeChoosers: some View {
         HStack(alignment:.bottom, spacing: 30) {
@@ -66,14 +56,6 @@ struct ContentView: View {
         }
     }
     
-    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
-        Button(action: {
-                cardCount += offset
-        }, label: {
-            Image(systemName: symbol)
-        })
-        .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count)
-    }
     
     func themeChooser(symbol: String, theme: Theme, title: String) -> some View {
         Button(action: {
@@ -86,19 +68,20 @@ struct ContentView: View {
                         .font(.title)
                 Text(title)
             }
-            
         })
     }
     
     func updateEmojiTheme() {
         switch currentTheme {
         case .beach:
-            emojis = beachEmojis
+            emojis = beachEmojis + beachEmojis
         case .christmas:
-            emojis = xmasEmojis
+            emojis = xmasEmojis + xmasEmojis
         default:
-            emojis = halloweenEmojis
+            emojis = halloweenEmojis + halloweenEmojis
         }
+        
+        emojis.shuffle()
     }
     
     var spookyThemeChooser: some View {
@@ -113,6 +96,27 @@ struct ContentView: View {
         themeChooser(symbol: "app.gift", theme: Theme.christmas, title: "XMas")
     }
     
+    
+    
+    
+    var cardCountAdjusters: some View {
+        HStack {
+            cardRemover
+            Spacer()
+            cardAdder
+        }.imageScale(.large)
+            .font(.largeTitle)
+    }
+    
+    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
+        Button(action: {
+                cardCount += offset
+        }, label: {
+            Image(systemName: symbol)
+        })
+        .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count)
+    }
+    
     var cardRemover: some View {
         cardCountAdjuster(by: -1, symbol: "rectangle.stack.fill.badge.minus")
     }
@@ -124,7 +128,7 @@ struct ContentView: View {
 
 struct CardView: View {
     let content: String
-    @State var isFaceUp = false
+    @State var isFaceUp = true
     
     var body: some View{
         ZStack {
