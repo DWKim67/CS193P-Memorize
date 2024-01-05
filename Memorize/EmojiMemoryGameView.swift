@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  EmojiMemoryGameView.swift
 //  Memorize
 //
 //  Created by Daniel Kim on 2024-01-02.
@@ -11,7 +11,9 @@ enum Theme {
     case halloween, christmas, beach
 }
 
-struct ContentView: View {
+struct EmojiMemoryGameView: View {
+    var viewModel: EmojiMemoryGame = EmojiMemoryGame()
+    
     let halloweenEmojis: Array<String> = ["👻","🎃","🕷️","😈","💀","🧙"]
     let xmasEmojis: Array<String> = ["🎅","🦌","🎄","🎁","⛄️","❄️"]
     let beachEmojis: Array<String> = ["🌊","☀️","🐚","🏖️","🦀","🩴"]
@@ -39,8 +41,8 @@ struct ContentView: View {
     var cards: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]) {
             
-            ForEach(emojis.indices, id: \.self) { index in
-                CardView(content: emojis[index])
+            ForEach(viewModel.cards.indices, id: \.self) { index in
+                CardView(card: viewModel.cards[index])
                     .aspectRatio(2/3, contentMode: .fit)
             }
             
@@ -127,8 +129,7 @@ struct ContentView: View {
 }
 
 struct CardView: View {
-    let content: String
-    @State var isFaceUp = true
+    let card: MemoryGame<String>.Card
     
     var body: some View{
         ZStack {
@@ -137,16 +138,13 @@ struct CardView: View {
                 base.foregroundColor(.white)
                 
                 base.strokeBorder(lineWidth: 2)
-                Text(content).font(.largeTitle)
-            }.opacity(isFaceUp ? 1 : 0)
-            base.fill().opacity(isFaceUp ? 0 : 1)
-        }
-        .onTapGesture {
-            isFaceUp.toggle()
+                Text(card.content).font(.largeTitle)
+            }.opacity(card.isFaceUp ? 1 : 0)
+            base.fill().opacity(card.isFaceUp ? 0 : 1)
         }
     }
 }
 
 #Preview {
-    ContentView()
+    EmojiMemoryGameView()
 }
