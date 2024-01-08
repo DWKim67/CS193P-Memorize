@@ -29,6 +29,10 @@ struct EmojiMemoryGameView: View {
             Text("Memorize!")
                 .font(.largeTitle)
                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+            Text("Theme: \(viewModel.getThemeName())")
+            Text("Score: \(viewModel.getScore())")
+            Spacer()
+                .frame(height:20)
             ScrollView {
                 cards
                     .animation(.default, value: viewModel.cards)
@@ -47,7 +51,9 @@ struct EmojiMemoryGameView: View {
     }
     
     var newGameButton: some View {
-        Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+        Button(action: { 
+            viewModel.newGame()
+        }, label: {
             Text("New Game")
                 .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
         })

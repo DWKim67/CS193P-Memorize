@@ -10,16 +10,24 @@ import Foundation
 struct MemoryGame<CardContent> where CardContent: Equatable {
     private(set) var cards: Array<Card>
     private(set) var themes: [Theme]
+    private(set) var score: Int
     
-    init(numberOfPairsOfCards: Int,  cardContentFactory: (Int) -> CardContent) {
+    init(themePackage: () -> [Theme]) {
         cards = []
-        themes = []
+        themes = themePackage()
+        score = 0
+        
+        themes.shuffle()
+        themes[0].emojis.shuffle()
         // Add numberOfPairsOfCards x 2 cards
-        for pairIndex in 0..<max(2, numberOfPairsOfCards) {
-            let content = cardContentFactory(pairIndex)
+        
+        for pairIndex in 0..<max(2, themes[0].numPairs) {
+            let content = themes[0].emojis[pairIndex]
             cards.append(Card(content: content, id: "\(pairIndex+1)a"))
             cards.append(Card(content: content, id: "\(pairIndex+1)b"))
         }
+        
+        cards.shuffle()
     }
     
     var indexOfTheOneAndOnlyFaceUpCard: Int? {
@@ -36,6 +44,14 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                     if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                         cards[chosenIndex].isMatched = true
                         cards[potentialMatchIndex].isMatched = true
+                        score+=2
+                    } else {
+                        if cards[chosenIndex].previouslySeen { score-=1 } else {
+                            cards[chosenIndex].previouslySeen = true
+                        }
+                        if cards[potentialMatchIndex].previouslySeen { score-=1 } else {
+                            cards[potentialMatchIndex].previouslySeen = true
+                        }
                     }
                 } else {
                     indexOfTheOneAndOnlyFaceUpCard = chosenIndex
@@ -43,6 +59,22 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                 cards[chosenIndex].isFaceUp = true
             }
         }
+    }
+    
+    mutating func newGame() {
+        themes.shuffle()
+        themes[0].emojis.shuffle()
+        // Add numberOfPairsOfCards x 2 cards
+        
+        cards = []
+        
+        for pairIndex in 0..<max(2, themes[0].numPairs) {
+            let content = themes[0].emojis[pairIndex]
+            cards.append(Card(content: content, id: "\(pairIndex+1)a"))
+            cards.append(Card(content: content, id: "\(pairIndex+1)b"))
+        }
+        
+        cards.shuffle()
     }
     
     
@@ -54,6 +86,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
         var isFaceUp: Bool = false
         var isMatched: Bool = false
+        var previouslySeen: Bool = false
         let content: CardContent
         
         var id: String
@@ -64,7 +97,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     
     struct Theme {
         let name: String
-        var emojis: [String]
+        var emojis: [CardContent]
         var numPairs: Int
         let color: String
     }
