@@ -9,20 +9,16 @@ import Foundation
 
 struct MemoryGame<CardContent> where CardContent: Equatable {
     private(set) var cards: Array<Card>
-    private(set) var themes: [Theme]
     private(set) var score: Int
     
-    init(themePackage: () -> [Theme]) {
+    init(numberOfPairsOfCards: Int,  cardContentFactory: (Int) -> CardContent) {
         cards = []
-        themes = themePackage()
         score = 0
         
-        themes.shuffle()
-        themes[0].emojis.shuffle()
         // Add numberOfPairsOfCards x 2 cards
         
-        for pairIndex in 0..<max(2, themes[0].numPairs) {
-            let content = themes[0].emojis[pairIndex]
+        for pairIndex in 0..<max(2, numberOfPairsOfCards) {
+            let content = cardContentFactory(pairIndex)
             cards.append(Card(content: content, id: "\(pairIndex+1)a"))
             cards.append(Card(content: content, id: "\(pairIndex+1)b"))
         }
@@ -44,13 +40,13 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                     if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                         cards[chosenIndex].isMatched = true
                         cards[potentialMatchIndex].isMatched = true
-                        score+=2
+                        score+=2 + cards[chosenIndex].bonus + cards[potentialMatchIndex].bonus
                     } else {
                         if cards[chosenIndex].previouslySeen { score-=1 } else {
-                            cards[chosenIndex].previouslySeen = true
+                            //cards[chosenIndex].previouslySeen = true
                         }
                         if cards[potentialMatchIndex].previouslySeen { score-=1 } else {
-                            cards[potentialMatchIndex].previouslySeen = true
+                            //cards[potentialMatchIndex].previouslySeen = true
                         }
                     }
                 } else {
@@ -61,15 +57,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         }
     }
     
-    mutating func newGame() {
-        themes.shuffle()
-        themes[0].emojis.shuffle()
-        // Add numberOfPairsOfCards x 2 cards
-        
+    mutating func newGame(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent) {
+        score = 0
         cards = []
-        
-        for pairIndex in 0..<max(2, themes[0].numPairs) {
-            let content = themes[0].emojis[pairIndex]
+        for pairIndex in 0..<max(2, numberOfPairsOfCards) {
+            let content = cardContentFactory(pairIndex)
             cards.append(Card(content: content, id: "\(pairIndex+1)a"))
             cards.append(Card(content: content, id: "\(pairIndex+1)b"))
         }
@@ -84,10 +76,61 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     }
     
     struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
-        var isFaceUp: Bool = false
-        var isMatched: Bool = false
+        var isFaceUp: Bool = false {
+            didSet {
+                if isFaceUp {
+                    startUsingBonusTime()
+                } else {
+                    stopUsingBonusTime()
+                }
+                if oldValue && !isFaceUp {
+                    previouslySeen = true
+                }
+            }
+        }
+        var isMatched: Bool = false {
+            didSet {
+                if isMatched {
+                    stopUsingBonusTime()
+                }
+            }
+        }
         var previouslySeen: Bool = false
         let content: CardContent
+        
+        private mutating func startUsingBonusTime() {
+            if isFaceUp && !isMatched && bonusPercentRemaining > 0, lastFaceUpDate ==
+                nil {
+                lastFaceUpDate = Date()
+            }
+        }
+        
+        private mutating func stopUsingBonusTime() {
+            pastFaceUpTime = faceUpTime
+            lastFaceUpDate = nil
+        }
+        
+        var bonus: Int {
+            Int(bonusTimeLimit * bonusPercentRemaining)
+        }
+        
+        var bonusPercentRemaining: Double {
+            bonusTimeLimit > 0 ? max(0, bonusTimeLimit - faceUpTime) / bonusTimeLimit : 0
+        }
+        
+        var faceUpTime: TimeInterval {
+            if let lastFaceUpDate {
+                return pastFaceUpTime + Date().timeIntervalSince(lastFaceUpDate)
+            } else {
+                return pastFaceUpTime
+            }
+        }
+        
+        var bonusTimeLimit: TimeInterval = 6
+        
+        var lastFaceUpDate: Date?
+        
+        var pastFaceUpTime: TimeInterval = 0
         
         var id: String
         var debugDescription: String {
@@ -95,12 +138,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         }
     }
     
-    struct Theme {
-        let name: String
-        var emojis: [CardContent]
-        var numPairs: Int
-        let color: String
-    }
 }
 
 extension Array {

@@ -9,7 +9,7 @@ import SwiftUI
 
 
 class EmojiMemoryGame: ObservableObject {
-    private let themeCount = 6
+    private static var themes: [EmojiTheme] = []
     private static let halloweenEmojis = ["👻","🎃","🕷️","😈","💀","🧙"]
     private static let xmasEmojis: Array<String> = ["🎅","🦌","🎄","🎁","⛄️","❄️"]
     private static let beachEmojis: Array<String> = ["🌊","☀️","🐚","🏖️","🦀","🩴"]
@@ -22,30 +22,29 @@ class EmojiMemoryGame: ObservableObject {
     
     private static func createMemoryGame() -> MemoryGame<String> {
         
-        return MemoryGame {
-            var themePackage: [MemoryGame<String>.Theme] = []
-            themePackage.append(MemoryGame<String>.Theme(name: "Halloween", emojis: halloweenEmojis, numPairs: 6, color: "orange"))
-            themePackage.append(MemoryGame<String>.Theme(name: "Christmas", emojis: xmasEmojis, numPairs: 4, color: "green"))
-            themePackage.append(MemoryGame<String>.Theme(name: "Beach", emojis: beachEmojis, numPairs: 6, color: "blue"))
-            themePackage.append(MemoryGame<String>.Theme(name: "School", emojis: schoolEmojis, numPairs: 5, color: "black"))
-            themePackage.append(MemoryGame<String>.Theme(name: "Art", emojis: artEmojis, numPairs: 6, color: "brown"))
-            themePackage.append(MemoryGame<String>.Theme(name: "Party", emojis: partyEmojis, numPairs: 6, color: "yellow"))
-            
-            return themePackage
-        }
+        createThemes()
         
-        /*
-        
-        return MemoryGame(numberOfPairsOfCards: 6) { pairIndex in
-            if emojis.indices.contains(pairIndex) {
-                return emojis[pairIndex]
+        return MemoryGame(numberOfPairsOfCards: themes[0].numPairs) { pairIndex in
+            if themes[0].emojis.indices.contains(pairIndex) {
+                return themes[0].emojis[pairIndex]
             } else {
                 return "😅"
             }
-        }*/
+        }
+    }
+    
+    private static func createThemes() {
+        themes.append(EmojiTheme(name: "Halloween", emojis: EmojiMemoryGame.halloweenEmojis, numPairs: 2, color: .orange))
+        themes.append(EmojiTheme(name: "Christmas", emojis: EmojiMemoryGame.xmasEmojis, numPairs: 4, color: .green))
+        themes.append(EmojiTheme(name: "Beach", emojis: EmojiMemoryGame.beachEmojis, numPairs: 2, color: .blue))
+        themes.append(EmojiTheme(name: "School", emojis: EmojiMemoryGame.schoolEmojis, numPairs: 6, color: .black))
+        themes.append(EmojiTheme(name: "Art", emojis: EmojiMemoryGame.artEmojis, numPairs: 6, color: .brown))
+        themes.append(EmojiTheme(name: "Party", emojis: EmojiMemoryGame.partyEmojis, numPairs: 6, color: .yellow))
+        themes.shuffle()
     }
         
     @Published private var game = createMemoryGame()
+    
     
     var cards: Array<MemoryGame<String>.Card> {
         return game.cards
@@ -58,11 +57,22 @@ class EmojiMemoryGame: ObservableObject {
     }
     
     func newGame() {
-        game.newGame()
+        EmojiMemoryGame.themes.shuffle()
+        game.newGame(numberOfPairsOfCards: EmojiMemoryGame.themes[0].numPairs) { pairIndex in
+            if EmojiMemoryGame.themes[0].emojis.indices.contains(pairIndex) {
+                return EmojiMemoryGame.themes[0].emojis[pairIndex]
+            } else {
+                return "😅"
+            }
+        }
     }
     
     func getThemeName() -> String {
-        game.themes[0].name
+        EmojiMemoryGame.themes[0].name
+    }
+    
+    func getThemeColor() -> Color {
+        EmojiMemoryGame.themes[0].color
     }
     
     func getScore() -> Int {
@@ -72,4 +82,5 @@ class EmojiMemoryGame: ObservableObject {
     func choose(_ card: MemoryGame<String>.Card) {
         game.choose(card)
     }
+
 }

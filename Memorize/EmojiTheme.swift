@@ -5,11 +5,11 @@
 //  Created by Daniel Kim on 2024-01-08.
 //
 
-import Foundation
+import SwiftUI
 
-struct Theme {
+struct EmojiTheme {
     let name: String
     var emojis: [String]
     var numPairs: Int
-    let color: String
+    let color: Color
 }
