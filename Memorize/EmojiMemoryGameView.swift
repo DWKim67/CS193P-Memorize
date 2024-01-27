@@ -34,17 +34,13 @@ struct EmojiMemoryGameView: View {
                 .animation(nil)
             Spacer()
                 .frame(height:20)
-            ScrollView {
                 cards
                     //.animation(.default, value: viewModel.cards)
-            }
             Spacer()
             deck
                 .foregroundColor(viewModel.getThemeColor())
             HStack{
                 newGameButton
-                Spacer()
-                
                 Spacer()
                 shuffle
             }
@@ -76,6 +72,7 @@ struct EmojiMemoryGameView: View {
     private var newGameButton: some View {
         Button(action: {
             viewModel.newGame()
+            dealt.removeAll()
         }, label: {
             Text("New Game")
                 .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)

@@ -9,6 +9,8 @@ import SwiftUI
 
 
 class EmojiMemoryGame: ObservableObject {
+    private(set) var theme = "Halloween"
+    
     private static var themes: [EmojiTheme] = []
     private static let halloweenEmojis = ["👻","🎃","🕷️","😈","💀","🧙"]
     private static let xmasEmojis: Array<String> = ["🎅","🦌","🎄","🎁","⛄️","❄️"]

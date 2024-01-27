@@ -19,6 +19,7 @@
 		EDA46A852B4C510300E27204 /* EmojiTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA46A842B4C510300E27204 /* EmojiTheme.swift */; };
 		EDAD841C2B462F96006B5D26 /* MemorizeGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAD841B2B462F96006B5D26 /* MemorizeGame.swift */; };
 		EDAD841E2B463165006B5D26 /* EmojiMemoryGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAD841D2B463165006B5D26 /* EmojiMemoryGame.swift */; };
+		EDB66ACB2B64487B00B0E48B /* ThemeChoosingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB66ACA2B64487B00B0E48B /* ThemeChoosingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		EDA46A842B4C510300E27204 /* EmojiTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiTheme.swift; sourceTree = "<group>"; };
 		EDAD841B2B462F96006B5D26 /* MemorizeGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizeGame.swift; sourceTree = "<group>"; };
 		EDAD841D2B463165006B5D26 /* EmojiMemoryGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMemoryGame.swift; sourceTree = "<group>"; };
+		EDB66ACA2B64487B00B0E48B /* ThemeChoosingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeChoosingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				ED771F3C2B44BD8F008613C1 /* Preview Content */,
 				EDAD841B2B462F96006B5D26 /* MemorizeGame.swift */,
 				EDAD841D2B463165006B5D26 /* EmojiMemoryGame.swift */,
+				EDB66ACA2B64487B00B0E48B /* ThemeChoosingView.swift */,
 				EDA46A842B4C510300E27204 /* EmojiTheme.swift */,
 			);
 			path = Memorize;
@@ -171,6 +174,7 @@
 				EDAD841C2B462F96006B5D26 /* MemorizeGame.swift in Sources */,
 				EDAD841E2B463165006B5D26 /* EmojiMemoryGame.swift in Sources */,
 				ED7FF97D2B50BE5600B1B287 /* FlyingNumber.swift in Sources */,
+				EDB66ACB2B64487B00B0E48B /* ThemeChoosingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,10 +305,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Memorize/Preview Content\"";
-				DEVELOPMENT_TEAM = VP4XQY33DA;
+				DEVELOPMENT_TEAM = X5NHXDACWS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -317,8 +322,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Daniel-Kim.Memorize";
+				PRODUCT_BUNDLE_IDENTIFIER = com.1652171.richtextemail;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -330,10 +336,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Memorize/Preview Content\"";
-				DEVELOPMENT_TEAM = VP4XQY33DA;
+				DEVELOPMENT_TEAM = X5NHXDACWS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -346,8 +353,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Daniel-Kim.Memorize";
+				PRODUCT_BUNDLE_IDENTIFIER = com.1652171.richtextemail;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
